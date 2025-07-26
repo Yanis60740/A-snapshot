@@ -1,6 +1,5 @@
 {
     "name": "a-snapshot-retrospective-fujifilm",
-    "domains": ["a-snapshot-retrospective-fujifilm.vercel.app"],
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
     "framework": "vue"
