@@ -107,6 +107,7 @@ onUnmounted(() => {
     width: 100%;
     height: 100vh;
     background-color: $color-white;
+    
   &__navbar {
     display: flex;
     justify-content: space-between;

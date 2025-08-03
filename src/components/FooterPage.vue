@@ -33,7 +33,7 @@
     width: 100%;
     height: 570px;
     box-sizing: border-box;
-    padding: 5% 10% 2%;
+    padding: 172px 206px 2%;
     background-color: $color-white;
     color: $color-text-black;
     justify-content: space-between;

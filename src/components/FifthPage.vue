@@ -43,8 +43,8 @@
     flex-direction: column;
     width: 100%;
     height: auto;
+    padding: 172px 206px;
     box-sizing: border-box;
-    padding: 2% 10%;
     background-color: $color-green;
     color: $color-white;
     justify-content: space-around;

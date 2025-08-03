@@ -85,13 +85,13 @@ import ModelViewer from './ModelViewer.vue';
     flex-direction: column;
     width: 100%;
     height: auto;
+    padding: 172px 206px;
     box-sizing: border-box;
-    padding: 2% 10%;
     background-color: $color-red-dark;
     color: $color-pink;
     justify-content: space-around;
     line-height: 1.4;
-        gap: 40px;
+    gap: 40px;
 
     &__box1 {
         display: flex;
