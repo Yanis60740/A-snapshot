@@ -54,7 +54,7 @@
         &__subtitle {
             font-family: $font-tangerine;
             font-weight: 400;
-            font-size: 40px;
+            font-size: 30px;
         }
     }
     &__part2 {
