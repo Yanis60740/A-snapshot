@@ -13,12 +13,12 @@
             </div>
         </div>
         <div class="heroPage__content" ref="scalableGroup">
-            <div class="heroPage__content__box" >
-                <div class="heroPage__content__box__title">
-                    <span :class="{ 'is-blurred': blurAmount > 0 }" :style="{ '--blur-amount': `${blurAmount}px` }">Snapshot Magazine</span>
+            <div class="heroPage__content__box" :style="{ filter: `blur(${blur}px)` }" >
+                <div class="heroPage__content__box__title" >
+                    <span >Snapshot Magazine</span>
                 </div>
                 <div class="heroPage__content__box__subtitle">
-                    <span :class="{ 'is-blurred': blurAmount > 0 }" :style="{ '--blur-amount': `${blurAmount}px` }">Vol. 1 - Fujifilm retrospective</span>
+                    <span >Vol. 1 - Fujifilm retrospective</span>
                 </div>
             </div>
         </div>
@@ -28,18 +28,37 @@
 <script setup>
 import GLBViewer from '@/components/GLBViewer.vue'
 import { ref, computed, provide, onMounted, onUnmounted } from 'vue'
+import {defineProps, watch} from 'vue'
+
+const props = defineProps({
+  scrollPosition: Number
+})
+
 
 const virtualScroll = ref(0)
 provide('virtualScroll', virtualScroll)
 
 const SCROLL_HIDE_THRESHOLD = 300
 const hideModel = computed(() => virtualScroll.value > SCROLL_HIDE_THRESHOLD)
-
+watch(hideModel, (newVal) => {
+  if (newVal) {
+    // autorise le scroll quand le modèle est caché
+    document.body.style.overflow = 'auto'
+  } else {
+    // bloque le scroll tant que le modèle est visible
+    document.body.style.overflow = 'hidden'
+  }
+})
 const scalableGroup = ref(null)
 
-const blurAmount = ref(0) // de 0 à ~10px
+const blur = computed(() => {
+  const y = Math.min(Math.max(0, props.scrollPosition - 300), 300)
+  return 10 - (y / 300) * 10 // blur: 10px -> 0px
+})
 
-const MAX_BLUR_SCROLL = 150 // plus tu scrolles, plus le texte est flou (max à 10px)
+// const blurAmount = ref(0) // de 0 à ~10px
+
+// const MAX_BLUR_SCROLL = 150 // plus tu scrolles, plus le texte est flou (max à 10px)
 
  function onWheel(event)  {
     event.preventDefault()
@@ -48,13 +67,13 @@ const MAX_BLUR_SCROLL = 150 // plus tu scrolles, plus le texte est flou (max à 
     const scalePercent = Math.min(Math.max(virtualScroll.value, 0), 300) / 300
     const scaleValue = 1 + scalePercent
 
-    const scrollClamped = Math.min(Math.max(virtualScroll.value - 300, 0), MAX_BLUR_SCROLL)
-    blurAmount.value = (scrollClamped / MAX_BLUR_SCROLL) * 10 // flou commence après 300px de scroll
+    // const scrollClamped = Math.min(Math.max(virtualScroll.value - 300, 0), MAX_BLUR_SCROLL)
+    // blurAmount.value = (scrollClamped / MAX_BLUR_SCROLL) * 10 // flou commence après 300px de scroll
 
     if (scalableGroup.value) {
       const spans = scalableGroup.value.querySelectorAll('span')
       spans.forEach(span => {
-        console.log('ScaleValue:', scaleValue, 'Scroll:', virtualScroll.value)
+        // console.log('ScaleValue:', scaleValue, 'Scroll:', virtualScroll.value)
 
         span.style.transform = `scale(${scaleValue})`
         span.style.transformOrigin = 'center'
@@ -65,11 +84,13 @@ const MAX_BLUR_SCROLL = 150 // plus tu scrolles, plus le texte est flou (max à 
     }
 
 onMounted(() => {
-  window.addEventListener('wheel', onWheel, { passive: false })
+  window.addEventListener('wheel', onWheel, { passive: true })
+  document.body.style.overflow = 'hidden' // reset scroll
 })
 
 onUnmounted(() => {
-  window.removeEventListener('wheel', onWheel)
+  window.removeEventListener('wheel', onWheel, { passive: true })
+  document.body.style.overflow = 'auto' // reset scroll
 })
 
 
@@ -128,6 +149,8 @@ onUnmounted(() => {
             font-family: $font-tangerine;
             font-weight: 400;
             font-size: 28px;
+            transition: filter 0.5s ease;
+
             & span {
                 display: inline-block;
                 transition: transform 0.1s ease-out;
@@ -150,6 +173,10 @@ onUnmounted(() => {
 .is-blurred {
   filter: blur(var(--blur-amount));
   transition: filter 0.1s ease-out;
+}
+
+.blurred {
+  filter: blur(10px);
 }
 
 </style>

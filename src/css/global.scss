@@ -47,6 +47,10 @@ table {
 body {
   overflow-x: hidden;
 }
+
+body::-webkit-scrollbar {
+  display: none !important; /* Chrome/Safari */
+}
 @font-face {
   font-family: 'PP Neue Montreal';
   src: url('../assets/fonts/PPNeueMontreal-Thin.otf') format('otf');

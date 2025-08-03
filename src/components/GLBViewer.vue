@@ -30,6 +30,7 @@ onMounted(() => {
 
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.enableZoom = false
+  controls.enableRotate = false
 
   const light = new THREE.DirectionalLight(0xffffff, 1)
   light.position.set(0, 2, 2)
@@ -57,7 +58,6 @@ onMounted(() => {
 
     let rawScroll = virtualScroll?.value || 0
 
-    // ⛔ Ne pas descendre sous minScroll
     if (rawScroll < minScroll) {
       rawScroll = minScroll
       if (virtualScroll) virtualScroll.value = minScroll
